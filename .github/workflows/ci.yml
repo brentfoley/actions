@@ -15,3 +15,4 @@ jobs:
           java-version: '11' # The JDK version to make available on the path.
       - name: Maven build
         run: mvn install -DskipTests
+
