@@ -21,9 +21,11 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        key: maven-build-${{ hashFiles('**/pom.xml') }}
         restore-keys: |
-          ${{ runner.os }}-maven-
+          maven-build-
+          maven
+          
       
     - run: mvn install -DskipTests
 
@@ -140,9 +142,10 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        key: maven-unittest-${{ hashFiles('**/pom.xml') }}
         restore-keys: |
-          ${{ runner.os }}-maven-
+          maven-unittest-
+          maven-
 
     - run: mvn test
 
