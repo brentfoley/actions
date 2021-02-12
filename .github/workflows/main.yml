@@ -91,9 +91,9 @@ jobs:
         # Commit SHA to which test results are published. Only needed if the value of GITHUB_SHA does not work for you.
         #commit: # optional
         # Name of the created check run
-        #check_name: # optional, default is Unit Test Results
+        check_name: Sanity
         # Title of PR comments, defaults to value of check_name input
-        #comment_title: # optional
+        comment_title: Action Results
         # File pattern of test result files
         files: '**/TEST-*.xml'
         # Individual runs of the same test may see different failures. Reports all individual failures when set "true" or the first only otherwise
