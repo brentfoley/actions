@@ -70,7 +70,7 @@ jobs:
 
     - run: mvn test
 
-  tests_no_cache:
+  test_no_cache:
 
     runs-on: ubuntu-latest
     needs: build
@@ -180,6 +180,6 @@ jobs:
   publish:
 
     runs-on: ubuntu-latest
-    needs: [test, anchore, veracode]
+    needs: [test_with_cache, test_no_cache, anchore, veracode]
     steps:
     - run : echo "Publish the stuff!"
