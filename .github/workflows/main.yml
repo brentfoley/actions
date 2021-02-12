@@ -17,6 +17,9 @@ jobs:
       with:
         java-version: 1.8
       
+    - id: version_step
+      run: echo "::set-output name=MY_VAR::ice"
+      
     - uses: paulhatch/semantic-version@v3.3
       with:
         # The prefix to use to identify tags
@@ -76,7 +79,7 @@ jobs:
       with:
         name: build-artifacts
 
-    - run: mvn test
+    - run: echo "${{ jobs.build.steps.version_step.outputs.MY_VAR }}"
 
   anchore:
 
