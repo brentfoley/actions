@@ -20,7 +20,7 @@ jobs:
     - uses: paulhatch/semantic-version@v3.3
       with:
         # The prefix to use to identify tags
-        branch: "master"
+        branch: "main"
         # The prefix to use to identify tags
         tag_prefix: "v"
         # A string which, if present in a git commit, indicates that a change represents a
