@@ -50,14 +50,6 @@ jobs:
       with:
         name: build-artifacts
 
-    - name: Cache local Maven repository
-      uses: actions/cache@v2
-      with:
-        path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-maven-
-
     - run: mvn test
 
   anchore:
@@ -78,8 +70,7 @@ jobs:
 
     - run: mvn test
 
-
-  test:
+  tests_no_cache:
 
     runs-on: ubuntu-latest
     needs: build
@@ -94,6 +85,64 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: build-artifacts
+
+    - run: mvn test
+
+    - name: Publish Unit Test Results
+      # You may pin to the exact commit or the version.
+      # uses: EnricoMi/publish-unit-test-result-action@bb944a8122372f56a33b518757fbef4be5f6f54b
+      uses: EnricoMi/publish-unit-test-result-action@v1.8
+      with:
+        # GitHub API Access Token
+        #github_token: # default is ${{ github.token }}
+        # Commit SHA to which test results are published. Only needed if the value of GITHUB_SHA does not work for you.
+        #commit: # optional
+        # Name of the created check run
+        check_name: Sanity
+        # Title of PR comments, defaults to value of check_name input
+        comment_title: Action Results
+        # File pattern of test result files
+        files: '**/TEST-*.xml'
+        # Individual runs of the same test may see different failures. Reports all individual failures when set "true" or the first only otherwise
+        #report_individual_runs: # optional
+        # De-duplicates classes with same name by their file name when set "true", combines test results for those classes otherwise
+        #deduplicate_classes_by_file_name: # optional
+        # Configures which earlier comments of the action to hide: off - no comments, orphaned commits - comments for commits that are removed from the branch, all but latest - all comments but the latest
+        #hide_comments: # optional, default is all but latest
+        # Control PR comments: false - disable PR comments, true - comment on PRs
+        #comment_on_pr: # optional, default is true
+        # Limits the number of removed or skipped tests listed on PR comments. This can be disabled with a value of 0. The default is 10.
+        #test_changes_limit: # optional
+        # Adds additional information to the check run (comma-separated list): all tests - list all found tests, skipped tests - list all skipped tests, none - no extra annotations at all
+        #check_run_annotations: # optional, default is all tests, skipped tests
+        # Adds check run annotations only on given branches. If not given, this defaults to the default branch of your repository, e.g. main or master. Comma separated list of branch names allowed, asterisk "*" matches all branches.
+        #check_run_annotations_branch: # optional
+        # Action logging level
+        #log_level: # optional, default is INFO
+
+  test_with_cache:
+
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+
+    - name: Download build artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: build-artifacts
+
+    - name: Cache local Maven repository
+      uses: actions/cache@v2
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
 
     - run: mvn test
 
