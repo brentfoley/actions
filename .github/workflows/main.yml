@@ -155,7 +155,7 @@ jobs:
       with:
         name: test-artiacts
         path: |
-          '**/TEST-*.xml'
+          target/**/TEST-*.xml
 
     - name: Publish Unit Test Results
       # You may pin to the exact commit or the version.
